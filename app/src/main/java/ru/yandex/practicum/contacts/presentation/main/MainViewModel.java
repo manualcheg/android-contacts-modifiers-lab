@@ -77,13 +77,13 @@ public class MainViewModel extends AndroidViewModel {
     public void onMenuClick(MenuClick click) {
         switch (click) {
             case SORT:
-                uiState.actions.showSortTypeDialog.data = state.getSortType();
+                uiState.getActions().showSortTypeDialog.data = state.getSortType();
                 break;
             case FILTER:
-                uiState.actions.showFilterContactTypeDialog.data = new HashSet<>(state.getContactTypes());
+                uiState.getActions().showFilterContactTypeDialog.data = new HashSet<>(state.getContactTypes());
                 break;
             case SEARCH:
-                uiState.searchVisibility = !uiState.searchVisibility;
+                uiState.setSearchVisibility(!uiState.getSearchVisibility());
                 break;
         }
         updateUiState();
@@ -102,31 +102,31 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void onBackPressed() {
-        if (uiState.searchVisibility) {
-            uiState.searchVisibility = false;
+        if (uiState.getSearchVisibility()) {
+            uiState.setSearchVisibility( false);
         } else {
-            uiState.actions.finishActivity.data = true;
+            uiState.getActions().finishActivity.data = true;
         }
         updateUiState();
     }
 
     public void updateSearchText(String query) {
         state.setQuery(query);
-        uiState.resetSearchButtonVisibility = state.getQuery().length() != 0;
+        uiState.setResetSearchButtonVisibility( state.getQuery().length() != 0);
         updateUiState();
     }
 
     private void updateBadges() {
         if (!state.getSortType().equals(state.getDefaultSortType())) {
-            uiState.menuBadges.sort = new MainUiState.MenuBadge(0);
+            uiState.getMenuBadges().sort = new MainUiState.MenuBadge(0);
         } else {
-            uiState.menuBadges.sort = null;
+            uiState.getMenuBadges().sort = null;
         }
 
         if (!state.getContactTypes().equals(state.getDefaultContactTypes())) {
-            uiState.menuBadges.filter = new MainUiState.MenuBadge(state.getContactTypes().size());
+            uiState.getMenuBadges().filter = new MainUiState.MenuBadge(state.getContactTypes().size());
         } else {
-            uiState.menuBadges.filter = null;
+            uiState.getMenuBadges().filter = null;
         }
 
         updateUiState();
@@ -207,6 +207,6 @@ public class MainViewModel extends AndroidViewModel {
 
     private void updateUiState() {
         uiStateLiveDate.setValue(uiState.copy());
-        uiState.actions.clear();
+        uiState.getActions().clear();
     }
 }
